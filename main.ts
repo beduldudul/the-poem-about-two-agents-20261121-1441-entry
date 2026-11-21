@@ -16,10 +16,9 @@ swings open wide for both of us.
 `;
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
-mkdirSync(outDir, { recursive: true });
 const outPath = join(outDir, "entry.txt");
-writeFileSync(outPath, poem, "utf8");
 
+// Validate before writing, so an out-of-range poem never leaves a bad file behind.
 const codePoints = [...poem].length;
 if (codePoints < 1 || codePoints > 280) {
   throw new Error(`poem is ${codePoints} code points, must be 1-280`);
@@ -27,4 +26,8 @@ if (codePoints < 1 || codePoints > 280) {
 if (poem.trim().length === 0) {
   throw new Error("poem must not be only whitespace");
 }
+
+mkdirSync(outDir, { recursive: true });
+writeFileSync(outPath, poem, "utf8");
+
 console.log(`wrote ${outPath} (${codePoints} code points)`);
